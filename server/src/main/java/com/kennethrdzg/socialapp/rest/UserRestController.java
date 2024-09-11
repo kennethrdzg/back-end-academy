@@ -26,12 +26,13 @@ public class UserRestController{
     }
 
     @PostMapping("/register")
-    boolean registerUser(@RequestBody User user){
+    User registerUser(@RequestBody User user){
         user.setId(0);
         return userService.register(user);
     }
+
     @PostMapping("/login")
-    boolean login(@RequestBody User user){
+    User login(@RequestBody User user){
         return userService.login(user);
     }
 }
