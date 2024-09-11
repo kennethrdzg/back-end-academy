@@ -9,10 +9,10 @@
   - [ ] Front End: Login Form
   - [ ] Security: Authentication and Authorization
 - Thursday, September 12th
-  - [ ] RabbitMQ Message Brokering
-- Friday, September 13th
   - [ ] Front End: Posts and Content
   - [ ] Unit Testing
+- Friday, September 13th
+  - [ ] RabbitMQ Message Brokering
 - Saturday, September 14th
   - [ ] REST API: PUT and DELETE endpoints
 - Sunday, September 15h
