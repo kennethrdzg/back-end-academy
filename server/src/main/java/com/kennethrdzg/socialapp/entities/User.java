@@ -27,6 +27,6 @@ public class User {
     @Column(name = "salt")
     private String salt;
 
-    @Column(name = "hashed_password")
-    private String hashedPassword;
+    @Column(name = "password_hash")
+    private String passwordHash;
 }

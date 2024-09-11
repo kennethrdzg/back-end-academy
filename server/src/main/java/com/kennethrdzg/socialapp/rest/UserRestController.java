@@ -1,6 +1,8 @@
 package com.kennethrdzg.socialapp.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,8 +59,18 @@ public class UserRestController{
         }
     }
 
+    @GetMapping("/login/{username}")
+    public String getSalt(@PathVariable String username) throws RuntimeException{
+        try{
+            return userService.getSalt(username);
+        } catch(RuntimeException e){
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     @PostMapping("/login")
-    public UserToken login(@RequestBody User user){
+    public UserToken login(@RequestBody User user) throws RuntimeException{
         try {
             user = userService.login(user);
         } catch(RuntimeException e){
