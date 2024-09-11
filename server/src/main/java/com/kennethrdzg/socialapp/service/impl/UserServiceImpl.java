@@ -1,6 +1,6 @@
 package com.kennethrdzg.socialapp.service.impl;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,24 +20,27 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public boolean register(User user){
+    public User register(User user){
         try{
             User result = userRepository.save(user);
-            return result.getId() > 0;
+            return result;
         }
         catch(DataIntegrityViolationException e){
             System.err.println("Oops!");
-            return false;
+            return null;
         }
     }
 
     @Override
-    public boolean login(User user){
-        List<User> users = userRepository.findAll();
-        boolean result = users.stream()
-            .anyMatch(
-                u -> u.getUsername().compareTo(user.getUsername()) == 0 && u.getPasswd().compareTo(user.getPasswd()) == 0
-            );
-        return result;
+    public User login(User user){
+        Optional<User> result =  userRepository.findAll()
+            .stream()
+            .filter(
+                (u) ->
+                u.getUsername().compareTo(user.getUsername()) == 0
+                && u.getPasswd().compareTo(user.getPasswd()) == 0
+            ).findFirst();
+
+        return result.isPresent() ? result.get(): null;
     }
 }
