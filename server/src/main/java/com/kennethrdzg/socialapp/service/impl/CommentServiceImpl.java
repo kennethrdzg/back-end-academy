@@ -33,8 +33,8 @@ public class CommentServiceImpl implements CommentService{
         return this.commentRepository.save(comment);
     }
 
-    @Override
-    public void deleteComment(int commentId){
-        this.commentRepository.deleteById(commentId);
-    }
+    // @Override
+    // public void deleteComment(int commentId){
+    //     this.commentRepository.deleteById(commentId);
+    // }
 }

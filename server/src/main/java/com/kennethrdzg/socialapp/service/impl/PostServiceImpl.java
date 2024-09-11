@@ -65,9 +65,6 @@ public class PostServiceImpl implements PostService{
     @Override
     public Post getPostById(int postId){
         Optional<Post> result = this.postRepository.findById(postId);
-        if(result.isPresent()){
-            return result.get();
-        }
-        return null;
+        return result.isPresent() ? result.get(): null;
     }
 }
