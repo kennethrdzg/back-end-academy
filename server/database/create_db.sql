@@ -9,9 +9,8 @@ DROP TABLE IF EXISTS post_comment;
 CREATE TABLE user_data(
     userID int NOT NULL AUTO_INCREMENT,
     username VARCHAR(24) NOT NULL,
-    passwd VARCHAR(64) NOT NULL,
-    # salt VARCHAR(12) NOT NULL,
-    # hashedPassword VARCHAR(64) NOT NULL,
+    salt VARCHAR(12) NOT NULL,
+    hashed_password VARCHAR(64) NOT NULL,
     PRIMARY KEY (userID), UNIQUE (username)
 ) AUTO_INCREMENT=1;
 

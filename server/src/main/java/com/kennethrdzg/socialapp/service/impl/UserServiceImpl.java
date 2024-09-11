@@ -1,5 +1,6 @@
 package com.kennethrdzg.socialapp.service.impl;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +21,40 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User register(User user){
-        try{
-            User result = userRepository.save(user);
-            return result;
+    public User register(User user) throws RuntimeException{
+        String username = user.getUsername();
+        boolean usernameExists = userRepository.findAll()
+            .stream()
+            .anyMatch( (u) -> u.getUsername().compareTo(username) == 0);
+        if(!usernameExists){
+            try{
+                user = userRepository.save(user);
+                return user;
+            }
+            catch(DataIntegrityViolationException e){
+                System.err.println("Username is already taken.");
+                throw new RuntimeException(e.getMessage());
+            }
         }
-        catch(DataIntegrityViolationException e){
-            System.err.println("Oops!");
-            return null;
-        }
+        return null;
     }
 
     @Override
-    public User login(User user){
+    public User login(User user) throws RuntimeException{
         Optional<User> result =  userRepository.findAll()
             .stream()
             .filter(
                 (u) ->
                 u.getUsername().compareTo(user.getUsername()) == 0
-                && u.getPasswd().compareTo(user.getPasswd()) == 0
+                && u.getHashedPassword().compareTo(user.getHashedPassword()) == 0
             ).findFirst();
-
-        return result.isPresent() ? result.get(): null;
+        
+        try{
+            return result.orElseThrow();
+        }
+        catch(NoSuchElementException e){
+            System.err.println("User does not exist");
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

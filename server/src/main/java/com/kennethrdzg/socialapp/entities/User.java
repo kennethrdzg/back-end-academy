@@ -24,6 +24,9 @@ public class User {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "passwd")
-    private String passwd;
+    @Column(name = "salt")
+    private String salt;
+
+    @Column(name = "hashed_password")
+    private String hashedPassword;
 }
