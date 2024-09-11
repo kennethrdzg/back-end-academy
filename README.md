@@ -1,21 +1,21 @@
 # Week 5: Final Project
 
 ## Topics covered
-- Object Oriented Programming
-- Collections
-- Lambda Expressions
-- Streams
-- Maven Dependencies
-- Design Patterns
-- Databases
-- Java Persistence API
-- Sprind Data JPA
-- Spring Batch
-- Unit Testing
-- JUnit
-- Mockito
-- RabbitMQ
-- Security
+- [x] Object Oriented Programming
+- [x] Collections
+- [x] Lambda Expressions
+- [x] Streams
+- [x] Maven Dependencies
+- [ ] Design Patterns
+- [x] Databases
+- [x] Java Persistence API
+- [x] Sprind Data JPA
+- [ ] Spring Batch
+- [ ] Unit Testing
+- [ ] JUnit
+- [ ] Mockito
+- [ ] RabbitMQ
+- [ ] Security
 
 ## Suggestions
 - Docker Container
@@ -31,4 +31,6 @@
 - Online Recipe Database
 - Fitness Tracking App
 - Task Management Application
+
+Selected Idea: **Social Media Platform**
 
