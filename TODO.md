@@ -1,22 +1,24 @@
 # TODO
 
-- [ ] Monday, September 9th
-  - [ ] 
-- [ ] Tuesday, September 10th
-  - [ ] 
+- [x] Monday, September 9th
+  - [x] Database Schema
+  - [x] REST API: User Registration and Login
+- [x] Tuesday, September 10th
+  - [x] REST API: Posts and Comments
 - [ ] Wednesday, September 11th
   - [ ] Front End: Login Form
-  - [ ] Add Security: Authentication and Authorization
+  - [ ] Security: Authentication and Authorization
 - Thursday, September 12th
-  - [ ] Implement RabbitMQ
+  - [ ] RabbitMQ Message Brokering
 - Friday, September 13th
   - [ ] Front End: Posts and Content
-  - [ ] Unit Tests
+  - [ ] Unit Testing
 - Saturday, September 14th
-  - [ ] Add 
+  - [ ] REST API: PUT and DELETE endpoints
 - Sunday, September 15h
+  - [ ] Spring Batch: Data Migration or Backup
 - Monday, September 16th
-  - [ ] Finish Documentation
-- Tuesday, September 17th
-  - **DUE DATE**
+  - [ ] Documentation
+- [ ] Tuesday, September 17th: **DUE DATE**
+  - [ ] Project Submission
 
