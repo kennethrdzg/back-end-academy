@@ -1,6 +1,7 @@
 package com.kennethrdzg.socialapp.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.kennethrdzg.socialapp.service.UserService;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin
 public class UserRestController{
     private UserService userService;
     private String secret_key;
