@@ -40,13 +40,30 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public String getSalt(String username) throws RuntimeException{
+        Optional<User> optUser = userRepository.findAll()
+            .stream()
+            .filter(
+                (u) -> u.getUsername().compareTo(username) == 0
+            ).findFirst();
+        User user;
+        try{
+            user = optUser.orElseThrow();
+        } catch(NoSuchElementException e){
+            System.err.println("User \"" + username + "\" does not exist");
+            throw new RuntimeException(e.getMessage());
+        }
+        return user.getSalt();
+    }
+
+    @Override
     public User login(User user) throws RuntimeException{
         Optional<User> result =  userRepository.findAll()
             .stream()
             .filter(
                 (u) ->
                 u.getUsername().compareTo(user.getUsername()) == 0
-                && u.getHashedPassword().compareTo(user.getHashedPassword()) == 0
+                && u.getPasswordHash().compareTo(user.getPasswordHash()) == 0
             ).findFirst();
         
         try{

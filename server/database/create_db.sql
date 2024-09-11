@@ -2,15 +2,16 @@ CREATE DATABASE IF NOT EXISTS SocialDB;
 
 USE SocialDB;
 
-DROP TABLE IF EXISTS user_data;
-DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS post_comment;
+DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS user_data;
+
 
 CREATE TABLE user_data(
     userID int NOT NULL AUTO_INCREMENT,
     username VARCHAR(24) NOT NULL,
-    salt VARCHAR(12) NOT NULL,
-    hashed_password VARCHAR(64) NOT NULL,
+    salt VARCHAR(32) NOT NULL,
+    password_hash VARCHAR(64) NOT NULL,
     PRIMARY KEY (userID), UNIQUE (username)
 ) AUTO_INCREMENT=1;
 
