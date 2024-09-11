@@ -29,11 +29,16 @@ public class PostRestController {
         return postService.getPosts();
     }
 
-    @GetMapping("/{page}")
+    @GetMapping("/page/{page}")
     public List<Post> getPostsByPage(@PathVariable int page){
         if(page < 1)
             page = 1;
         return postService.getPosts(page);
+    }
+
+    @GetMapping("/{postId}")
+    public Post getPostById(@PathVariable int postId){
+        return postService.getPostById(postId);
     }
 
     @GetMapping("/user/{userId}")
@@ -43,6 +48,7 @@ public class PostRestController {
 
     @PostMapping("/upload")
     public Post uploadPost(@RequestBody Post post){
+        post.setId(0);
         post.setTimestamp(LocalDateTime.now());
         return postService.uploadPost(post);
     }

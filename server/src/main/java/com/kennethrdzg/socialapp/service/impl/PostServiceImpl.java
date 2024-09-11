@@ -1,6 +1,7 @@
 package com.kennethrdzg.socialapp.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,5 +60,14 @@ public class PostServiceImpl implements PostService{
                 (p1, p2) -> p2.getTimestamp().compareTo(p1.getTimestamp())
             )
             .toList();
+    }
+
+    @Override
+    public Post getPostById(int postId){
+        Optional<Post> result = this.postRepository.findById(postId);
+        if(result.isPresent()){
+            return result.get();
+        }
+        return null;
     }
 }
