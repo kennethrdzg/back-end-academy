@@ -59,21 +59,21 @@ public class UserServiceImpl implements UserService{
         return null;
     }
 
-    @Override
-    public String getSalt(String username) throws RuntimeException{
-        Optional<User> optUser = userRepository.findAll()
-            .stream()
-            .filter(
-                (u) -> u.getUsername().compareTo(username) == 0
-            ).findFirst();
-        User user;
-        try{
-            user = optUser.orElseThrow();
-        } catch(NoSuchElementException e){
-            throw new RuntimeException(e.getMessage());
-        }
-        return user.getSalt();
-    }
+    // @Override
+    // public String getSalt(String username) throws RuntimeException{
+    //     Optional<User> optUser = userRepository.findAll()
+    //         .stream()
+    //         .filter(
+    //             (u) -> u.getUsername().compareTo(username) == 0
+    //         ).findFirst();
+    //     User user;
+    //     try{
+    //         user = optUser.orElseThrow();
+    //     } catch(NoSuchElementException e){
+    //         throw new RuntimeException(e.getMessage());
+    //     }
+    //     return user.getSalt();
+    // }
 
     @Override
     public User login(User user) throws RuntimeException{
