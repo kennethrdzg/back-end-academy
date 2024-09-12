@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "client": {
+    "smalltalk": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/client",
+            "outputPath": "dist/smalltalk",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "client:build:production"
+              "buildTarget": "smalltalk:build:production"
             },
             "development": {
-              "buildTarget": "client:build:development"
+              "buildTarget": "smalltalk:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -98,5 +98,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
