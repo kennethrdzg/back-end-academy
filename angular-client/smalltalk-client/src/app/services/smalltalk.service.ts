@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { createHash } from 'crypto';
+import {SHA256} from 'crypto-js';
+import * as randomBytes from 'randombytes';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,12 @@ export class SmalltalkService {
   }
 
   registerUser(username: string, password: string){
-    let password_hash: string = createHash('sha256').update(password).digest('hex');
-    this.http.post(this.apiUrl, {'username': username, 'password': password_hash})
+    console.log(username);
+    console.log(password);
+    // let password_hash: string = createHash('sha256').update(password).digest('hex');
+    let password_hash: string = SHA256(password).toString();
+    console.log(password_hash);
+    this.http.post(this.apiUrl + "/users/register", {'username': username, 'passwordHash': password_hash})
       .subscribe(
         (res) => {
           console.log(res);
@@ -22,8 +27,9 @@ export class SmalltalkService {
   }
 
   logIn(username: string, password: string){
-    let password_hash: string = createHash('sha256').update(password).digest('hex');
-    this.http.post(this.apiUrl, {'username': username, 'password': password_hash})
+    // let password_hash: string = createHash('sha256').update(password).digest('hex');
+    let password_hash: string = SHA256(password).toString();
+    this.http.post(this.apiUrl + "/users/login", {'username': username, 'passwordHash': password_hash})
       .subscribe(
         (res) => {
           console.log(res);

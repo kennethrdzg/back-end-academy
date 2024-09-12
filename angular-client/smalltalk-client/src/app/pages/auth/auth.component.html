@@ -52,10 +52,10 @@
                     <label>Password</label>
                     <input type="password" placeholder="Password" formControlName="password">
                 </div>
+                <div>
+                    <input type="submit" value="Register" [disabled]="!registerForm.valid">
+                </div>
             </form>
-            <div>
-                <input type="submit" value="Register" [disabled]="!registerForm.valid">
-            </div>
         </div>
     }
 

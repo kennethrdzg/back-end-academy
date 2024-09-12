@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule} from '@angular/forms';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SmalltalkService } from '../../services/smalltalk.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class AuthComponent {
     ]), 
     password: new FormControl('', [
       Validators.required, 
-      Validators.minLength(4), 
+      Validators.minLength(8), 
       Validators.pattern("^([a-zA-Z0-9])+$")
     ])
   });
@@ -39,8 +39,7 @@ export class AuthComponent {
     ])
   })
 
-  constructor(private router: Router, private smalltalk: SmalltalkService){
-    this.router = router;
+  constructor(private smalltalk: SmalltalkService){
   }
 
   handleFormTypeChange(formType: string){
@@ -64,7 +63,7 @@ export class AuthComponent {
 
   get password(){
     if(this.formType === 'register')
-      return this.registerForm.get('username')
+      return this.registerForm.get('password')
     else
       return this.loginForm.get('password')
   }
