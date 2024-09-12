@@ -15,6 +15,7 @@ export class AuthComponent {
   formType: string = 'register';
   usernameError: string = '';
   passwordError: string = '';
+  passwordVisibility = 'password';
 
   registerForm = new FormGroup({
     username: new FormControl('', [
@@ -44,6 +45,7 @@ export class AuthComponent {
 
   handleFormTypeChange(formType: string){
     this.formType = formType;
+    this.passwordVisibility = 'password';
   }
 
   handleFormSubmit(){
@@ -52,6 +54,13 @@ export class AuthComponent {
     } else if(this.formType === 'login'){
       this.smalltalk.logIn(this.username?.getRawValue(), this.password?.getRawValue());
     }
+  }
+
+  updatePasswordVisibility(){
+    if(this.passwordVisibility === 'password')
+        this.passwordVisibility = 'text';
+    else
+      this.passwordVisibility = 'password';
   }
 
   get username(){

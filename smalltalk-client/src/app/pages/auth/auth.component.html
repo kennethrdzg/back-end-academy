@@ -43,14 +43,17 @@
             <form [formGroup]="registerForm" (ngSubmit)="handleFormSubmit()">
                 <div>
                     <label>Username</label>
-                    <input type="text" placeholder="username" formControlName="username">
+                    <input type="text" placeholder="Username" formControlName="username">
                     @if (usernameError) {
                         <div>{{usernameError}}</div>
                     }
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type="password" placeholder="Password" formControlName="password">
+                    <input type="{{passwordVisibility}}" placeholder="Password" formControlName="password">
+                </div>
+                <div>
+                    <input type="checkbox" (click)="updatePasswordVisibility()">
                 </div>
                 <div>
                     <input type="submit" value="Register" [disabled]="!registerForm.valid">
@@ -65,14 +68,17 @@
             <form [formGroup]="loginForm" (ngSubmit)="handleFormSubmit()">
                 <div>
                     <label>Username</label>
-                    <input type="text" placeholder="username" formControlName="username">
+                    <input type="text" placeholder="Username" formControlName="username">
                     @if (usernameError) {
                         <div>{{usernameError}}</div>
                     }
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type="password" placeholder="Password" formControlName="password">
+                    <input type="{{passwordVisibility}}" placeholder="Password" formControlName="password">
+                </div>
+                <div>
+                    <input type="checkbox" (click)="updatePasswordVisibility()">
                 </div>
                 <div>
                     <input type="submit" value="Sign-In" [disabled]="!loginForm.valid">
