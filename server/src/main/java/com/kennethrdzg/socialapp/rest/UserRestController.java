@@ -4,8 +4,8 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+// import org.springframework.web.bind.annotation.GetMapping;
+// import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,15 +66,15 @@ public class UserRestController{
         }
     }
 
-    @GetMapping("/login/{username}")
-    public String getSalt(@PathVariable String username) throws RuntimeException{
-        try{
-            return userService.getSalt(username);
-        } catch(RuntimeException e){
-            System.err.println("User \"" + username + "\" does not exist");
-            throw new RuntimeException(e.getMessage());
-        }
-    }
+    // @GetMapping("/login/{username}")
+    // public String getSalt(@PathVariable String username) throws RuntimeException{
+    //     try{
+    //         return userService.getSalt(username);
+    //     } catch(RuntimeException e){
+    //         System.err.println("User \"" + username + "\" does not exist");
+    //         throw new RuntimeException(e.getMessage());
+    //     }
+    // }
 
     @PostMapping("/login")
     public UserToken login(@RequestBody User user) throws RuntimeException{
