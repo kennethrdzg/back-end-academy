@@ -1,6 +1,7 @@
 package com.kennethrdzg.socialapp.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,12 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Post uploadPost(Post post){
-        return this.postRepository.save(post);
+    public Post uploadPost(Post post) throws RuntimeException{
+        try{
+            return this.postRepository.save(post);
+        } catch(IllegalArgumentException e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
@@ -37,8 +42,9 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<Post> getPosts(int page){
-        return this.postRepository.findAll()
+    public List<Post> getPosts(int page) throws RuntimeException{
+        try{
+            return this.postRepository.findAll()
             .stream()
             .sorted(
                 (p1, p2) -> p2.getTimestamp().compareTo(p1.getTimestamp())
@@ -46,6 +52,19 @@ public class PostServiceImpl implements PostService{
             .skip( (page - 1) * 10)
             .limit(10)
             .toList();
+        } catch(IllegalArgumentException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Post getPostById(int postId) throws RuntimeException{
+        Optional<Post> result = this.postRepository.findById(postId);
+        try{
+            return result.orElseThrow();
+        } catch(NoSuchElementException e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
@@ -60,11 +79,5 @@ public class PostServiceImpl implements PostService{
                 (p1, p2) -> p2.getTimestamp().compareTo(p1.getTimestamp())
             )
             .toList();
-    }
-
-    @Override
-    public Post getPostById(int postId){
-        Optional<Post> result = this.postRepository.findById(postId);
-        return result.isPresent() ? result.get(): null;
     }
 }
