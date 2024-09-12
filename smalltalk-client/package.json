@@ -21,7 +21,6 @@
     "@types/crypto-js": "^4.2.2",
     "@types/randombytes": "^2.0.3",
     "crypto-js": "^4.2.0",
-    "randombytes": "^2.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
