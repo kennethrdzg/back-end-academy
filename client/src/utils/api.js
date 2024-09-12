@@ -1,9 +1,14 @@
 import config from "../config";
 
-export const getPosts = async () => {
-    return await requestAPI('posts', 'GET');
-}
+import {randomBytes, createHash} from 'crypto-browserify';
 
+export const userRegister = async(username, password) => {
+    const salt = randomBytes(16).toString('hex');
+    console.log("SALT: " + salt);
+    const passwordHash = createHash('sha256').update(salt + password).digest('hex');
+    console.log(passwordHash)
+    return await requestAPI('/register', 'POST', {username, salt, passwordHash});
+}
 
 export const requestAPI = async (
     path = '', 
