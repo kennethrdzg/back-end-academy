@@ -12,10 +12,8 @@ export class SmalltalkService {
   }
 
   registerUser(username: string, password: string){
-    console.log(username);
-    console.log(password);
     let password_hash: string = SHA256(password).toString();
-    console.log(password_hash);
+    
     this.http.post(this.apiUrl + "/users/register", {'username': username, 'passwordHash': password_hash})
       .subscribe(
         (res) => {
