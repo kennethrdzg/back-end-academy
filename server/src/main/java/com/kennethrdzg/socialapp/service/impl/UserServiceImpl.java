@@ -20,6 +20,27 @@ public class UserServiceImpl implements UserService{
         this.userRepository = userRepository;
     }
 
+    public User getUserById(int id) throws RuntimeException{
+        Optional<User> user = this.userRepository.findById(id);
+        try{
+            return user.orElseThrow();
+        } catch(NoSuchElementException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public User getUserByUsername(String username) throws RuntimeException{
+        Optional<User> user = this.userRepository.findAll()
+            .stream()
+            .filter( (u) -> u.getUsername().compareTo(username) == 0)
+            .findFirst();
+            try{
+                return user.orElseThrow();
+            } catch(NoSuchElementException e){
+                throw new RuntimeException(e.getMessage());
+            }
+    }
+
     @Override
     public User register(User user) throws RuntimeException{
         String username = user.getUsername();
@@ -32,7 +53,6 @@ public class UserServiceImpl implements UserService{
                 return user;
             }
             catch(DataIntegrityViolationException e){
-                System.err.println("Username is already taken.");
                 throw new RuntimeException(e.getMessage());
             }
         }
@@ -50,7 +70,6 @@ public class UserServiceImpl implements UserService{
         try{
             user = optUser.orElseThrow();
         } catch(NoSuchElementException e){
-            System.err.println("User \"" + username + "\" does not exist");
             throw new RuntimeException(e.getMessage());
         }
         return user.getSalt();
@@ -70,7 +89,6 @@ public class UserServiceImpl implements UserService{
             return result.orElseThrow();
         }
         catch(NoSuchElementException e){
-            System.err.println("User does not exist");
             throw new RuntimeException(e.getMessage());
         }
     }

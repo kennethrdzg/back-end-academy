@@ -5,10 +5,11 @@
   - [x] REST API: User Registration and Login
 - [x] Tuesday, September 10th
   - [x] REST API: Posts and Comments
-- [ ] Wednesday, September 11th
-  - [ ] Front End: Login Form
-  - [ ] Security: Authentication and Authorization
+- [x] Wednesday, September 11th
+  - [x] Security: Authentication
+  - [x] Security: Authorization
 - Thursday, September 12th
+  - [ ] Front End: Login Form
   - [ ] Front End: Posts and Content
   - [ ] Unit Testing
 - Friday, September 13th

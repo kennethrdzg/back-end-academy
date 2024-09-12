@@ -1,5 +1,7 @@
 package com.kennethrdzg.socialapp.rest;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +28,17 @@ public class UserRestController{
     @Autowired
     public UserRestController(UserService userService){
         this.userService = userService;
-        secret_key = "SECRET_KEY";
+        this.secret_key = System.getenv("APP_SECRET_KEY");
     }
 
     private String createToken(String username) throws RuntimeException{
         try{
+            Date date = new Date();
+            date.setTime(date.getTime() + 30L*24L*60L*60L*1000L);
             Algorithm algorithm = Algorithm.HMAC256(secret_key);
             String token = JWT.create()
                 .withClaim("username", username)
+                .withExpiresAt(date)
                 .withIssuer("com.kennethrdzg")
                 .sign(algorithm);
             return token;
@@ -49,14 +54,14 @@ public class UserRestController{
             user = userService.register(user);
         }
         catch(RuntimeException e){
-            System.err.println("Error registering user");
+            System.err.println("Username \"" + user.getUsername() + "\" is already taken");
             throw new RuntimeException(e.getMessage());
         }
 
         try{
-            return new UserToken(user.getUsername(), createToken(user.getUsername()));
+            return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
-            System.err.println("Could not create authentication token");
+            System.err.println("Could not authenticate user");
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -66,7 +71,7 @@ public class UserRestController{
         try{
             return userService.getSalt(username);
         } catch(RuntimeException e){
-            System.err.println(e.getMessage());
+            System.err.println("User \"" + username + "\" does not exist");
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -76,11 +81,11 @@ public class UserRestController{
         try {
             user = userService.login(user);
         } catch(RuntimeException e){
-            System.err.println("Error logging in");
+            System.err.println("Incorrect username or password");
             throw new RuntimeException(e.getMessage());
         }
         try{
-            return new UserToken(user.getUsername(), createToken(user.getUsername()));
+            return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
             System.err.println("Could not create authentication token");
             throw new RuntimeException(e.getMessage());
