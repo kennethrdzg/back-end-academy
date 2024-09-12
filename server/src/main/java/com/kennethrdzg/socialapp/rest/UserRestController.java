@@ -1,5 +1,7 @@
 package com.kennethrdzg.socialapp.rest;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,9 +33,12 @@ public class UserRestController{
 
     private String createToken(String username) throws RuntimeException{
         try{
+            Date date = new Date();
+            date.setTime(date.getTime() + 30L*24L*60L*60L*1000L);
             Algorithm algorithm = Algorithm.HMAC256(secret_key);
             String token = JWT.create()
                 .withClaim("username", username)
+                .withExpiresAt(date)
                 .withIssuer("com.kennethrdzg")
                 .sign(algorithm);
             return token;
