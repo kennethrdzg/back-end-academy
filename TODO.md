@@ -7,7 +7,8 @@
   - [x] REST API: Posts and Comments
 - [ ] Wednesday, September 11th
   - [ ] Front End: Login Form
-  - [ ] Security: Authentication and Authorization
+  - [x] Security: Authentication
+  - [ ] Security: Authorization
 - Thursday, September 12th
   - [ ] Front End: Posts and Content
   - [ ] Unit Testing
