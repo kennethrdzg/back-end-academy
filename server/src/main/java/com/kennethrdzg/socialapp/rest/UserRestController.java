@@ -28,7 +28,7 @@ public class UserRestController{
     @Autowired
     public UserRestController(UserService userService){
         this.userService = userService;
-        secret_key = "SECRET_KEY";
+        this.secret_key = System.getenv("APP_SECRET_KEY");
     }
 
     private String createToken(String username) throws RuntimeException{
@@ -54,14 +54,14 @@ public class UserRestController{
             user = userService.register(user);
         }
         catch(RuntimeException e){
-            System.err.println("Error registering user");
+            System.err.println("Username \"" + user.getUsername() + "\" is already taken");
             throw new RuntimeException(e.getMessage());
         }
 
         try{
             return new UserToken(user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
-            System.err.println("Could not create authentication token");
+            System.err.println("Could not authenticate user");
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -71,7 +71,7 @@ public class UserRestController{
         try{
             return userService.getSalt(username);
         } catch(RuntimeException e){
-            System.err.println(e.getMessage());
+            System.err.println("User \"" + username + "\" does not exist");
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -81,7 +81,7 @@ public class UserRestController{
         try {
             user = userService.login(user);
         } catch(RuntimeException e){
-            System.err.println("Error logging in");
+            System.err.println("Incorrect username or password");
             throw new RuntimeException(e.getMessage());
         }
         try{
