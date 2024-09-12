@@ -59,7 +59,7 @@ public class UserRestController{
         }
 
         try{
-            return new UserToken(user.getUsername(), createToken(user.getUsername()));
+            return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
             System.err.println("Could not authenticate user");
             throw new RuntimeException(e.getMessage());
@@ -85,7 +85,7 @@ public class UserRestController{
             throw new RuntimeException(e.getMessage());
         }
         try{
-            return new UserToken(user.getUsername(), createToken(user.getUsername()));
+            return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
             System.err.println("Could not create authentication token");
             throw new RuntimeException(e.getMessage());
