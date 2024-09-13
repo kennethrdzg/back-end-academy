@@ -50,6 +50,14 @@
                 <div>{{post.username}}</div>
                 <div>{{post.content}}</div>
                 <div>{{post.timestamp}}</div>
+                <div (click)="post.liked = !post.liked">
+                  @if(post.liked){
+                    <ion-icon name="heart"></ion-icon>
+                  } @else {
+                    <ion-icon name="heart-outline"></ion-icon>
+                  }
+                </div>
+                <div>{{post.likes}}</div>
               </ion-card-content>
             </ion-card>
           </ion-col>

@@ -3,5 +3,7 @@ export interface Post {
     userId: number,
     username: string,
     content: string,
-    timestamp: Date
+    timestamp: Date,
+    likes: number,
+    liked: boolean
 }

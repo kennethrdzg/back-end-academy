@@ -21,6 +21,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.kennethrdzg.smalltalk.dto.PostDTO;
 import com.kennethrdzg.smalltalk.entities.Post;
 import com.kennethrdzg.smalltalk.entities.User;
+import com.kennethrdzg.smalltalk.service.PostLikeService;
 import com.kennethrdzg.smalltalk.service.PostService;
 import com.kennethrdzg.smalltalk.service.UserService;
 
@@ -30,18 +31,29 @@ import com.kennethrdzg.smalltalk.service.UserService;
 public class PostRestController {
     private PostService postService;
     private UserService userService;
+    private PostLikeService postLikeService;
     private String secretKey;
 
     @Autowired
-    public PostRestController(PostService postService, UserService userService){
+    public PostRestController(PostService postService, UserService userService, PostLikeService postLikeService){
         this.postService = postService;
         this.userService = userService;
+        this.postLikeService = postLikeService;
         this.secretKey = System.getenv("APP_SECRET_KEY");
     }
 
     @GetMapping
     public List<PostDTO> getPosts(){
-        return postService.getPosts();
+        return postService.getPosts()
+            .stream()
+            .map(
+                (post) -> new PostDTO(
+                    post.getId(),
+                    post.getContent(),
+                    post.getTimestamp(),
+                    userService.getUserById(post.getUserId()).getUsername(), 
+                    "", postLikeService.getPostLikes(post.getId()), postLikeService.isLikedByUser(post.getId(), post.getUserId()))
+            ).toList();
     }
 
     @GetMapping("/page/{page}")
@@ -49,7 +61,18 @@ public class PostRestController {
         if(page < 1)
             page = 1;
         try{
-            return postService.getPosts(page);
+            return postService.getPosts(page)
+                    .stream()
+                    .map(
+                        (post) -> new PostDTO(
+                            post.getId(), 
+                            post.getContent(), 
+                            post.getTimestamp(), 
+                            userService.getUserById(post.getUserId()).getUsername(),
+                            "", postLikeService.getPostLikes(post.getId()), 
+                            postLikeService.isLikedByUser(post.getId(), post.getUserId())
+                        )
+                    ).toList();
         } catch(RuntimeException e){
             System.err.println("Invalid page number");
             throw new RuntimeException(e.getMessage());
@@ -59,7 +82,14 @@ public class PostRestController {
     @GetMapping("/{postId}")
     public PostDTO getPostById(@PathVariable int postId) throws RuntimeException{
         try{
-            return postService.getPostById(postId);
+            Post post =  postService.getPostById(postId);
+            return new PostDTO(
+                post.getId(),
+                post.getContent(),
+                post.getTimestamp(),
+                userService.getUserById(post.getUserId()).getUsername(),
+                "", postLikeService.getPostLikes(postId),
+                postLikeService.isLikedByUser(post.getId(), post.getUserId()));
         } catch(RuntimeException e){
             System.err.println("Post with ID #" + postId + " does not exist");
             throw new RuntimeException(e.getMessage());
@@ -75,7 +105,17 @@ public class PostRestController {
             System.err.println("User with ID #" + userId + " does not exist");
             throw new RuntimeException();
         }
-        return postService.getPostsByUserId(userId);
+        return postService.getPostsByUserId(userId)
+                .stream()
+                .map(
+                    (post) -> new PostDTO(
+                        post.getId(),
+                        post.getContent(),
+                        post.getTimestamp(),
+                        userService.getUserById(userId).getUsername(),
+                        "", postLikeService.getPostLikes(post.getId()),
+                        postLikeService.isLikedByUser(post.getId(), userId))
+                ).toList();
     }
 
     @PostMapping("/upload")
@@ -111,7 +151,14 @@ public class PostRestController {
         );
 
         try{
-            return postService.uploadPost(post);
+            post = postService.uploadPost(post);
+            return new PostDTO(
+                post.getId(),
+                post.getContent(),
+                post.getTimestamp(),
+                userService.getUserById(post.getUserId()).getUsername(),
+                "", postLikeService.getPostLikes(post.getId()),
+                false);
         } catch(RuntimeException e){
             System.err.println("Could not upload post");
             throw new RuntimeException(e.getMessage());

@@ -1,7 +1,5 @@
 package com.kennethrdzg.smalltalk.entities;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,14 +11,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "post_comment")
-public class Comment{
+@Table(name = "post_like")
+public class PostLike{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "commentID")
+    @Column(name = "likeID")
     private int id;
 
     @Column(name = "userID")
@@ -28,10 +26,7 @@ public class Comment{
 
     @Column(name = "postID")
     private int postId;
-
-    @Column(name = "comment_timestamp")
-    private LocalDateTime timestamp;
-
-    @Column(name = "comment_content")
-    private String content;
+    
+    @Column(name = "liked")
+    private boolean liked;
 }

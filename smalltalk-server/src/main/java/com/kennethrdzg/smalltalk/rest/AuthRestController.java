@@ -21,12 +21,12 @@ import com.kennethrdzg.smalltalk.service.UserService;
 @RestController
 @RequestMapping("/users")
 @CrossOrigin
-public class UserRestController{
+public class AuthRestController{
     private UserService userService;
     private String secret_key;
 
     @Autowired
-    public UserRestController(UserService userService){
+    public AuthRestController(UserService userService){
         this.userService = userService;
         this.secret_key = System.getenv("APP_SECRET_KEY");
     }
