@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>SmallTalk</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logOut()">
+        <ion-label>Log Out</ion-label>
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="container">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="getPosts()">
+            <ion-icon name="arrow-up"></ion-icon>
+          </ion-button>
+          <p>Update Feed</p>
+        </ion-col>
+      </ion-row>
+      @if(posts.length <= 0){
+        <ion-row>
+          <ion-col>
+            No posts to see :(
+          </ion-col>
+        </ion-row>
+      }
+      
+      @for (post of posts; track post.id) {
+        <ion-row>
+          <ion-col>
+            <ion-card>
+              <ion-card-content>
+                <div>{{post.username}}</div>
+                <div>{{post.content}}</div>
+                <div>{{post.timestamp}}</div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      }
+    </ion-grid>
+  </div>
+</ion-content>
