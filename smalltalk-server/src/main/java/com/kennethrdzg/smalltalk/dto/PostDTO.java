@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDTO {
+    private int id;
     private String content;
     private LocalDateTime timestamp;
     private String username;

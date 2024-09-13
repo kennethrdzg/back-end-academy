@@ -15,6 +15,19 @@
     <ion-grid>
       <ion-row>
         <ion-col>
+          <ion-card>
+
+            <ion-card-content>
+              <form [formGroup]="postForm" (ngSubmit)="uploadPost()">
+                <ion-input type="text" placeholder="Your Post..." formControlName="content"></ion-input>
+                <ion-button type="submit" [disabled]="!postForm.valid">Post</ion-button>
+              </form>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
           <ion-button (click)="getPosts()">
             <ion-icon name="arrow-up"></ion-icon>
           </ion-button>

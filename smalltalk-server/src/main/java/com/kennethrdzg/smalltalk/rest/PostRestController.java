@@ -40,12 +40,12 @@ public class PostRestController {
     }
 
     @GetMapping
-    public List<Post> getPosts(){
+    public List<PostDTO> getPosts(){
         return postService.getPosts();
     }
 
     @GetMapping("/page/{page}")
-    public List<Post> getPostsByPage(@PathVariable int page) throws RuntimeException{
+    public List<PostDTO> getPostsByPage(@PathVariable int page) throws RuntimeException{
         if(page < 1)
             page = 1;
         try{
@@ -57,7 +57,7 @@ public class PostRestController {
     }
 
     @GetMapping("/{postId}")
-    public Post getPostById(@PathVariable int postId) throws RuntimeException{
+    public PostDTO getPostById(@PathVariable int postId) throws RuntimeException{
         try{
             return postService.getPostById(postId);
         } catch(RuntimeException e){
@@ -67,7 +67,7 @@ public class PostRestController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<Post> getPostsByUserId(@PathVariable int userId) throws RuntimeException{
+    public List<PostDTO> getPostsByUserId(@PathVariable int userId) throws RuntimeException{
         try{
             userService.getUserById(userId);
         }
@@ -79,7 +79,7 @@ public class PostRestController {
     }
 
     @PostMapping("/upload")
-    public Post uploadPost(@RequestBody PostDTO postDTO) throws RuntimeException{
+    public PostDTO uploadPost(@RequestBody PostDTO postDTO) throws RuntimeException{
         System.out.println(postDTO);
 
         User user;
@@ -106,11 +106,9 @@ public class PostRestController {
         System.out.println("Current time: " + new Date().getTime());
         System.out.println("Token expiration: " + decodedJWT.getExpiresAt().getTime());
 
-        Post post = new Post();
-        post.setId(0);
-        post.setUserId(user.getId());
-        post.setContent(postDTO.getContent());
-        post.setTimestamp(LocalDateTime.now());
+        Post post = new Post(
+            0, postDTO.getContent(), LocalDateTime.now(), user.getId()
+        );
 
         try{
             return postService.uploadPost(post);

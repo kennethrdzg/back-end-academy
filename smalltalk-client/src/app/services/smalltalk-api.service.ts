@@ -31,4 +31,13 @@ export class SmalltalkApiService {
   getPosts(): Observable<Array<Post>>{
     return this.http.get<Array<Post>>(this.apiUrl + "/posts");
   }
+
+  uploadPost(username: string, token: string, content: string){
+    this.http.post(this.apiUrl + "/posts/upload", {"username": username, "token": token, "content": content})
+      .subscribe(
+        response => {
+          console.log(response);
+        }
+      )
+  }
 }

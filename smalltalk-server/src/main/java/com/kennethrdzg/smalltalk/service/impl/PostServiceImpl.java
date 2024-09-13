@@ -7,30 +7,35 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kennethrdzg.smalltalk.dto.PostDTO;
 import com.kennethrdzg.smalltalk.entities.Post;
 import com.kennethrdzg.smalltalk.repository.PostRepository;
+import com.kennethrdzg.smalltalk.repository.UserRepository;
 import com.kennethrdzg.smalltalk.service.PostService;
 
 @Service
 public class PostServiceImpl implements PostService{
     private PostRepository postRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository){
+    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository){
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public Post uploadPost(Post post) throws RuntimeException{
+    public PostDTO uploadPost(Post post) throws RuntimeException{
         try{
-            return this.postRepository.save(post);
+            post = this.postRepository.save(post);
+            return new PostDTO(post.getId(), post.getContent(), post.getTimestamp(), "", "");
         } catch(IllegalArgumentException e){
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public List<Post> getPosts(){
+    public List<PostDTO> getPosts(){
         return this.postRepository
             .findAll()
             .stream()
@@ -38,11 +43,19 @@ public class PostServiceImpl implements PostService{
                 (p1, p2) -> p2.getTimestamp().compareTo(p1.getTimestamp())
             )
             .limit(10)
+            .map(
+                (post) -> new PostDTO(
+                    post.getId(),
+                    post.getContent(),
+                    post.getTimestamp(),
+                    this.userRepository.findById(post.getUserId()).orElseThrow().getUsername(),
+                    "")
+            )
             .toList();
     }
 
     @Override
-    public List<Post> getPosts(int page) throws RuntimeException{
+    public List<PostDTO> getPosts(int page) throws RuntimeException{
         try{
             return this.postRepository.findAll()
             .stream()
@@ -51,6 +64,14 @@ public class PostServiceImpl implements PostService{
             )
             .skip( (page - 1) * 10)
             .limit(10)
+            .map(
+                (post) -> new PostDTO(
+                    post.getId(),
+                    post.getContent(),
+                    post.getTimestamp(),
+                    this.userRepository.findById(post.getUserId()).orElseThrow().getUsername(), 
+                    "")
+            )
             .toList();
         } catch(IllegalArgumentException e){
             throw new RuntimeException(e.getMessage());
@@ -58,17 +79,23 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Post getPostById(int postId) throws RuntimeException{
+    public PostDTO getPostById(int postId) throws RuntimeException{
         Optional<Post> result = this.postRepository.findById(postId);
         try{
-            return result.orElseThrow();
+            Post post = result.orElseThrow();
+            return new PostDTO(
+                post.getId(),
+                post.getContent(),
+                post.getTimestamp(),
+                userRepository.findById(post.getUserId()).orElseThrow().getUsername(),
+                "");
         } catch(NoSuchElementException e){
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public List<Post> getPostsByUserId(int userId){
+    public List<PostDTO> getPostsByUserId(int userId){
         return this.postRepository
             .findAll()
             .stream()
@@ -77,6 +104,17 @@ public class PostServiceImpl implements PostService{
             )
             .sorted(
                 (p1, p2) -> p2.getTimestamp().compareTo(p1.getTimestamp())
+            )
+            .map(
+                (post) -> new PostDTO(
+                    post.getId(),
+                    post.getContent(),
+                    post.getTimestamp(),
+                    this.userRepository
+                        .findById(post.getUserId())
+                        .orElseThrow()
+                        .getUsername(),
+                    "")
             )
             .toList();
     }
