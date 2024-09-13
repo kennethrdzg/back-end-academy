@@ -9,10 +9,11 @@
   - [x] Security: Authentication
   - [x] Security: Authorization
 - Thursday, September 12th
-  - [ ] Front End: Login Form
-  - [ ] Front End: Posts and Content
-  - [ ] Unit Testing
+  - [x] Front End: Login Form
+  - [x] Front End: Posts and Likes
 - Friday, September 13th
+  - [ ] Update Like
+  - [ ] Unit Testing
   - [ ] RabbitMQ Message Brokering
 - Saturday, September 14th
   - [ ] REST API: PUT and DELETE endpoints
