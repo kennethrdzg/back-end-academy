@@ -84,7 +84,7 @@ public class PostRestController {
 
         User user;
         try{
-            user = userService.getUserById(postDTO.getUserId());
+            user = userService.getUserByUsername(postDTO.getUsername());
         } catch(RuntimeException e){
             System.err.println("User does not exist");
             throw new RuntimeException(e.getMessage());
@@ -108,7 +108,7 @@ public class PostRestController {
 
         Post post = new Post();
         post.setId(0);
-        post.setUserId(postDTO.getUserId());
+        post.setUserId(user.getId());
         post.setContent(postDTO.getContent());
         post.setTimestamp(LocalDateTime.now());
 

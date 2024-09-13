@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule} from '@angular/forms';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { SmalltalkService } from '../../services/smalltalk.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-auth',
@@ -40,7 +41,17 @@ export class AuthComponent {
     ])
   })
 
-  constructor(private smalltalk: SmalltalkService){
+  constructor(private router: Router, private smalltalk: SmalltalkService, private authService: AuthenticationService){
+    console.log(this.router.url.substring(1))
+    if(this.router.url !== '/auth'){
+      this.formType = this.router.url.substring(1);
+    }
+    // this.formType = this.router.url.substring(1);
+    const session = authService.getSession();
+    if(session.token){
+      this.router.navigate(['home']);
+    }
+    console.log(this.formType);
   }
 
   handleFormTypeChange(formType: string){
@@ -49,11 +60,23 @@ export class AuthComponent {
   }
 
   handleFormSubmit(){
+    this.loading = true;
     if(this.formType === 'register'){
-      this.smalltalk.registerUser(this.username?.getRawValue(), this.password?.getRawValue());
+      this.smalltalk.registerUser(this.username?.getRawValue(), this.password?.getRawValue())
+        .subscribe(
+          (userToken) => {
+            this.authService.saveSession(userToken);
+            this.router.navigate(['feed'])
+      });
     } else if(this.formType === 'login'){
-      this.smalltalk.logIn(this.username?.getRawValue(), this.password?.getRawValue());
+      this.smalltalk.logIn(this.username?.getRawValue(), this.password?.getRawValue())
+        .subscribe(
+          (userToken) => {
+            this.authService.saveSession(userToken);
+            this.router.navigate(['feed'])
+      });
     }
+    this.loading = false;
   }
 
   updatePasswordVisibility(){
@@ -76,4 +99,6 @@ export class AuthComponent {
     else
       return this.loginForm.get('password')
   }
+
+  
 }

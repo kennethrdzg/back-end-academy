@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-home',
@@ -9,5 +10,10 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-
+  constructor(private router: Router,private authservice: AuthenticationService){
+    const session = authservice.getSession()
+    if(session.token){
+      this.router.navigate(['feed']);
+    }
+  }
 }

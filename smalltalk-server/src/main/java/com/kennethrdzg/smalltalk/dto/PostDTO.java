@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class PostDTO {
     private String content;
     private LocalDateTime timestamp;
-    private int userId;
+    private String username;
     private String token;
 }
