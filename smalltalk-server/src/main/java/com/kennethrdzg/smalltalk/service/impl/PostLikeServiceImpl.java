@@ -36,7 +36,9 @@ public class PostLikeServiceImpl implements PostLikeService{
             .filter(
                 (like) -> like.getPostId() == postId && like.getUserId() == userId
             ).findAny();
-            
+        if(result.isPresent()){
+            return result.orElseThrow().isLiked();
+        }
         return false;
     }
 }
