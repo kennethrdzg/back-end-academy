@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {SHA256} from 'crypto-js';
 import { UserToken } from '../entities/user-token';
 import { Observable } from 'rxjs';
+import { Post } from '../entities/post';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +23,9 @@ export class SmalltalkService {
   logIn(username: string, password: string): Observable<UserToken>{
     let password_hash: string = SHA256(password).toString();
     return this.http.post<UserToken>(this.apiUrl + "/users/login", {'username': username, 'passwordHash': password_hash});
+  }
+
+  getPosts(): Observable<Array<Post>>{
+    return this.http.get<Array<Post>>(this.apiUrl + "/posts");
   }
 }

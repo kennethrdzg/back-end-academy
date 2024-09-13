@@ -4,4 +4,12 @@
         <button (click)="logOut()">Log Out</button>
     </div>
     <p>Hello {{username}}!</p>
+    @for (post of posts; track post.id){
+        <div>
+            <p>{{post.userId}}</p>
+            <p>{{post.id}}</p>
+            <p>{{post.content}}</p>
+            <p>{{post.timestamp}}</p>
+        </div>
+    }
 </div>

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication.service';
+import { SmalltalkService } from '../../services/smalltalk.service';
+import { Post } from '../../entities/post';
 
 @Component({
   selector: 'app-feed',
@@ -10,8 +12,12 @@ import { AuthenticationService } from '../../services/authentication.service';
   styleUrl: './feed.component.scss'
 })
 export class FeedComponent {
+  
   username: string = '';
-  constructor(private router: Router,private authservice: AuthenticationService){
+
+  posts: Post[] = [];
+  
+  constructor(private router: Router, private authservice: AuthenticationService, private smalltalkService: SmalltalkService){
     const session = authservice.getSession()
     if(!session.token){
       this.router.navigate(['home']);
@@ -19,10 +25,25 @@ export class FeedComponent {
     else{
       this.username = session.username;
     }
+    this.getPosts();
   }
 
   logOut(){
     this.authservice.deleteSession();
     this.router.navigate(['home']);
+  }
+
+  getPosts(){
+    this.posts = [];
+    this.smalltalkService.getPosts().subscribe(
+      (p) =>{
+        p.forEach(
+          (post) => {
+            this.posts.push(post);
+          }
+        )
+      }
+    )
+    console.log(this.posts);
   }
 }
