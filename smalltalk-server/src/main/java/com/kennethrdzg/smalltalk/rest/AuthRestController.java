@@ -62,7 +62,7 @@ public class AuthRestController{
             return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
             System.err.println("Could not authenticate user");
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -88,7 +88,7 @@ public class AuthRestController{
             return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
             System.err.println("Could not create authentication token");
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException();
         }
     }
 }

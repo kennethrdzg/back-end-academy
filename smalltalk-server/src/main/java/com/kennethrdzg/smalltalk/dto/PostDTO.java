@@ -14,7 +14,7 @@ public class PostDTO {
     private String content;
     private LocalDateTime timestamp;
     private String username;
-    private String token;
-    private long likes;
     private boolean liked;
+    private long likes;
+    private String token;
 }

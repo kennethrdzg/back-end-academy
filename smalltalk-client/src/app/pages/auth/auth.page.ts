@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, map, Observable } from 'rxjs';
 import { SessionService } from 'src/app/services/session.service';
 import { SmalltalkApiService } from 'src/app/services/smalltalk-api.service';
 
@@ -13,8 +14,7 @@ export class AuthPage implements OnInit {
 
   loading: boolean = false;
   formType: string = 'register';
-  usernameError: string = '';
-  passwordError: string = '';
+  errorMessage: string = '';
   passwordVisibility = 'password';
   
 
@@ -45,10 +45,10 @@ export class AuthPage implements OnInit {
     if(this.router.url !== '/auth'){
       this.formType = this.router.url.substring(1);
     }
-    // const session = authService.getSession();
-    // if(session.token){
-    //   this.router.navigate(['home']);
-    // }
+    const session = sessionService.getSession();
+    if(session.token){
+      this.router.navigate(['home']);
+    }
   }
 
   ngOnInit() {
@@ -58,26 +58,36 @@ export class AuthPage implements OnInit {
   handleFormTypeChange(formType: string){
     this.formType = formType;
     this.passwordVisibility = 'password';
+    this.errorMessage = '';
   }
 
   handleFormSubmit(){
     this.loading = true;
     if(this.formType === 'register'){
       this.apiService.registerUser(this.username?.getRawValue(), this.password?.getRawValue())
-        .subscribe(
-          (userToken) => {
+        .subscribe({
+          next: (userToken) => {
+            this.errorMessage = '';
             this.sessionService.saveSession(userToken);
             this.router.navigate(['feed']);
+          },
+          error: err => {
+            this.errorMessage = 'Could not register user, try again later';
+            console.error(err);
           }
-        )
+        })
     } else if(this.formType === 'login'){
       this.apiService.logIn(this.username?.getRawValue(), this.password?.getRawValue())
-        .subscribe(
-          (userToken) => {
+        .subscribe({
+          next: (userToken) => {
+            this.errorMessage = '';
             this.sessionService.saveSession(userToken);
             this.router.navigate(['feed']);
+          }, error: err => {
+            this.errorMessage = 'Could not sign-in to account.\nVerify your username or password';
+            console.error(err);
           }
-        )
+        })
     }
     // if(this.formType === 'register'){
     //   this.smalltalk.registerUser(this.username?.getRawValue(), this.password?.getRawValue())

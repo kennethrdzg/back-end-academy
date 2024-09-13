@@ -19,7 +19,7 @@
 
             <ion-card-content>
               <form [formGroup]="postForm" (ngSubmit)="uploadPost()">
-                <ion-input type="text" placeholder="Your Post..." formControlName="content"></ion-input>
+                <ion-input type="text" placeholder="Share your thoughts, {{username}}..." formControlName="content"></ion-input>
                 <ion-button type="submit" [disabled]="!postForm.valid">Post</ion-button>
               </form>
             </ion-card-content>
@@ -34,34 +34,35 @@
           <p>Update Feed</p>
         </ion-col>
       </ion-row>
-      @if(posts.length <= 0){
+      @if(posts.length <= 0 && !loading){
         <ion-row>
           <ion-col>
             No posts to see :(
           </ion-col>
         </ion-row>
       }
-      
-      @for (post of posts; track post.id) {
-        <ion-row>
-          <ion-col>
-            <ion-card>
-              <ion-card-content>
-                <div>{{post.username}}</div>
-                <div>{{post.content}}</div>
-                <div>{{post.timestamp}}</div>
-                <div (click)="post.liked = !post.liked">
-                  @if(post.liked){
-                    <ion-icon name="heart"></ion-icon>
-                  } @else {
-                    <ion-icon name="heart-outline"></ion-icon>
-                  }
-                </div>
-                <div>{{post.likes}}</div>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
+      @if(!loading && posts.length > 0){
+        @for (post of posts; track post.id) {
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-content>
+                  <div>{{post.username}}</div>
+                  <div>{{post.content}}</div>
+                  <div>{{post.timestamp}}</div>
+                  <div (click)="likeButtonPressed(post)">
+                    @if(post.liked){
+                      <ion-icon name="heart"></ion-icon>
+                    } @else {
+                      <ion-icon name="heart-outline"></ion-icon>
+                    }
+                  </div>
+                  <div>{{post.likes}}</div>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        }
       }
     </ion-grid>
   </div>

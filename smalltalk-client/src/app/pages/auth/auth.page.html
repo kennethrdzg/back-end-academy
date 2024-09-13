@@ -62,7 +62,9 @@
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <ion-input type="password" label="Password" placeholder="Enter a password" errorText="Invalid Password" formControlName="password"></ion-input>
+                  <ion-input type="password" label="Password" placeholder="Enter a password" errorText="Invalid Password" formControlName="password">
+                    <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+                  </ion-input>
                 </ion-col>
               </ion-row>
               <ion-row>
@@ -96,6 +98,9 @@
           </form>
         </div>
       }
+      <div>
+        <p>{{errorMessage}}</p>
+      </div>
     }
 
   </div>

@@ -1,7 +1,6 @@
 package com.kennethrdzg.smalltalk.rest;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.kennethrdzg.smalltalk.dto.PostDTO;
 import com.kennethrdzg.smalltalk.entities.Post;
+import com.kennethrdzg.smalltalk.entities.PostLike;
 import com.kennethrdzg.smalltalk.entities.User;
 import com.kennethrdzg.smalltalk.service.PostLikeService;
 import com.kennethrdzg.smalltalk.service.PostService;
@@ -42,17 +41,40 @@ public class PostRestController {
         this.secretKey = System.getenv("APP_SECRET_KEY");
     }
 
-    @GetMapping
-    public List<PostDTO> getPosts(){
+    @GetMapping("/{userId}/{token}")
+    public List<PostDTO> getPosts(@PathVariable int userId, @PathVariable String token){
+        User user;
+        try{
+            user = userService.getUserById(userId);
+        } catch(RuntimeException e){
+            System.err.println("User does not exist");
+            throw new RuntimeException();
+        }
+
+        try{
+            Algorithm algorithm = Algorithm.HMAC256(this.secretKey);
+            JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("com.kennethrdzg")
+                .withClaim("username", user.getUsername())
+                .build();
+            verifier.verify(token);
+        } catch( JWTVerificationException exception){
+            System.err.println("Invalid JWT");
+            throw new RuntimeException();
+        }
         return postService.getPosts()
             .stream()
             .map(
-                (post) -> new PostDTO(
+                (post) -> {
+                    return new PostDTO(
                     post.getId(),
                     post.getContent(),
                     post.getTimestamp(),
                     userService.getUserById(post.getUserId()).getUsername(), 
-                    "", postLikeService.getPostLikes(post.getId()), postLikeService.isLikedByUser(post.getId(), post.getUserId()))
+                    postLikeService.isLikedByUser(post.getId(), userId),
+                    postLikeService.getPostLikes(post.getId()),
+                    null);
+                }
             ).toList();
     }
 
@@ -69,13 +91,14 @@ public class PostRestController {
                             post.getContent(), 
                             post.getTimestamp(), 
                             userService.getUserById(post.getUserId()).getUsername(),
-                            "", postLikeService.getPostLikes(post.getId()), 
-                            postLikeService.isLikedByUser(post.getId(), post.getUserId())
+                            postLikeService.isLikedByUser(post.getId(), post.getUserId()), 
+                            postLikeService.getPostLikes(post.getId()), 
+                            null
                         )
                     ).toList();
         } catch(RuntimeException e){
             System.err.println("Invalid page number");
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -88,11 +111,13 @@ public class PostRestController {
                 post.getContent(),
                 post.getTimestamp(),
                 userService.getUserById(post.getUserId()).getUsername(),
-                "", postLikeService.getPostLikes(postId),
-                postLikeService.isLikedByUser(post.getId(), post.getUserId()));
+                postLikeService.isLikedByUser(post.getId(), post.getUserId()),
+                postLikeService.getPostLikes(postId),
+                null
+                );
         } catch(RuntimeException e){
             System.err.println("Post with ID #" + postId + " does not exist");
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -113,38 +138,33 @@ public class PostRestController {
                         post.getContent(),
                         post.getTimestamp(),
                         userService.getUserById(userId).getUsername(),
-                        "", postLikeService.getPostLikes(post.getId()),
-                        postLikeService.isLikedByUser(post.getId(), userId))
+                        postLikeService.isLikedByUser(post.getId(), userId),
+                        postLikeService.getPostLikes(post.getId()), null
+                        )
                 ).toList();
     }
 
     @PostMapping("/upload")
     public PostDTO uploadPost(@RequestBody PostDTO postDTO) throws RuntimeException{
-        System.out.println(postDTO);
-
         User user;
         try{
             user = userService.getUserByUsername(postDTO.getUsername());
         } catch(RuntimeException e){
             System.err.println("User does not exist");
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException();
         }
 
-        DecodedJWT decodedJWT;
         try{
             Algorithm algorithm = Algorithm.HMAC256(this.secretKey);
             JWTVerifier verifier = JWT.require(algorithm)
                 .withIssuer("com.kennethrdzg")
                 .withClaim("username", user.getUsername())
                 .build();
-            decodedJWT = verifier.verify(postDTO.getToken());
+            verifier.verify(postDTO.getToken());
         } catch( JWTVerificationException exception){
             System.err.println("Invalid JWT");
-            throw new RuntimeException(exception.getMessage());
+            throw new RuntimeException();
         }
-
-        System.out.println("Current time: " + new Date().getTime());
-        System.out.println("Token expiration: " + decodedJWT.getExpiresAt().getTime());
 
         Post post = new Post(
             0, postDTO.getContent(), LocalDateTime.now(), user.getId()
@@ -157,11 +177,44 @@ public class PostRestController {
                 post.getContent(),
                 post.getTimestamp(),
                 userService.getUserById(post.getUserId()).getUsername(),
-                "", postLikeService.getPostLikes(post.getId()),
-                false);
+                false, postLikeService.getPostLikes(post.getId()),
+                null);
         } catch(RuntimeException e){
             System.err.println("Could not upload post");
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    @PostMapping("/like")
+    public PostDTO updateLike(@RequestBody PostDTO postDTO) throws RuntimeException{
+        User user;
+        try{
+            user = userService.getUserByUsername(postDTO.getUsername());
+        } catch(RuntimeException e){
+            System.err.println("User does not exist");
+            throw new RuntimeException();
+        }
+        try{
+            Algorithm algorithm = Algorithm.HMAC256(this.secretKey);
+            JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("com.kennethrdzg")
+                .withClaim("username", user.getUsername())
+                .build();
+            verifier.verify(postDTO.getToken());
+        } catch( JWTVerificationException exception){
+            System.err.println("Invalid JWT");
+            throw new RuntimeException();
+        }
+        PostLike postLike = this.postLikeService.updateLike(postDTO.getId(), user.getId(), postDTO.isLiked());
+        Post post = this.postService.getPostById(postDTO.getId());
+        return new PostDTO(
+            postDTO.getId(),
+            post.getContent(),
+            post.getTimestamp(),
+            this.userService.getUserById(post.getUserId()).getUsername(),
+            postLike.isLiked(),
+            this.postLikeService.getPostLikes(post.getId()),
+            null
+        );
     }
 }

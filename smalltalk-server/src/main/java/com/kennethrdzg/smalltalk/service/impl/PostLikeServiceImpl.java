@@ -41,4 +41,23 @@ public class PostLikeServiceImpl implements PostLikeService{
         }
         return false;
     }
+
+    @Override
+    public PostLike updateLike(int postId, int userId, boolean liked){
+        Optional<PostLike> result = this.postLikeRepository
+            .findAll()
+            .stream()
+            .filter(
+                (l) -> l.getPostId() == postId && l.getUserId() == userId
+            ).findAny();
+        if(result.isPresent()){
+            PostLike postLike = result.orElseThrow();
+            postLike.setLiked(liked);
+            return postLikeRepository.save(postLike);
+        }
+        else{
+            PostLike postLike = new PostLike(0, userId, postId, liked);
+            return postLikeRepository.save(postLike);
+        }
+    }
 }

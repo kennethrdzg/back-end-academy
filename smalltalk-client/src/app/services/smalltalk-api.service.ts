@@ -28,16 +28,15 @@ export class SmalltalkApiService {
     return this.http.post<UserToken>(this.apiUrl + "/users/login", {'username': username, 'passwordHash': password_hash});
   }
 
-  getPosts(): Observable<Array<Post>>{
-    return this.http.get<Array<Post>>(this.apiUrl + "/posts");
+  getPosts(userToken: UserToken): Observable<Array<Post>>{
+    return this.http.get<Array<Post>>(this.apiUrl + "/posts/"+userToken.userId+"/"+userToken.token);
   }
 
-  uploadPost(username: string, token: string, content: string){
-    this.http.post(this.apiUrl + "/posts/upload", {"username": username, "token": token, "content": content})
-      .subscribe(
-        response => {
-          console.log(response);
-        }
-      )
+  uploadPost(userToken: UserToken, content: string): Observable<Post>{
+    return this.http.post<Post>(this.apiUrl + "/posts/upload", {"username": userToken.username, "token": userToken.token, "content": content});
+  }
+
+  likeButtonPressed(userToken: UserToken, postId: number, liked: boolean): Observable<Post>{
+    return this.http.post<Post>(this.apiUrl + "/posts/like", {"username": userToken.username, "token": userToken.token, "id": postId, "liked": liked});
   }
 }

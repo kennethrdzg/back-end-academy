@@ -43,9 +43,9 @@ CREATE TABLE post_like(
 --     FOREIGN KEY (userID) REFERENCES user_data(userID),
 --     FOREIGN KEY (postID) REFERENCES post(postID)
 -- ) AUTO_INCREMENT=1;
-INSERT INTO post_like (`userID`, `postID`, liked) VALUES (1, 16, TRUE);
-INSERT INTO post_like (`userID`, `postID`, liked) VALUES (5, 16, TRUE);
-INSERT INTO post_like (`userID`, `postID`, liked) VALUES (1, 17, TRUE);
-INSERT INTO post_like (`userID`, `postID`, liked) VALUES (5, 17, TRUE);
-INSERT INTO post_like (`userID`, `postID`, liked) VALUES (6, 17, TRUE);
-INSERT INTO post_like (`userID`, `postID`, liked) VALUES (1, 18, TRUE);
+-- INSERT INTO post_like (`userID`, `postID`, liked) VALUES (1, 16, TRUE);
+-- INSERT INTO post_like (`userID`, `postID`, liked) VALUES (5, 16, TRUE);
+-- INSERT INTO post_like (`userID`, `postID`, liked) VALUES (1, 17, TRUE);
+-- INSERT INTO post_like (`userID`, `postID`, liked) VALUES (5, 17, TRUE);
+-- INSERT INTO post_like (`userID`, `postID`, liked) VALUES (6, 17, TRUE);
+-- INSERT INTO post_like (`userID`, `postID`, liked) VALUES (1, 18, TRUE);
