@@ -68,7 +68,7 @@ public class AuthRestController{
 
         try{
             Queue queue = new Queue(user.getUsername());
-            Binding binding = new Binding(user.getUsername(), Binding.DestinationType.QUEUE, exchange, user.getUsername(), null);
+            Binding binding = new Binding(user.getUsername(), Binding.DestinationType.QUEUE, exchange, String.valueOf(user.getId()), null);
             admin.declareQueue(queue);
             admin.declareBinding(binding);
             return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
@@ -98,7 +98,7 @@ public class AuthRestController{
         }
         try{
             Queue queue = new Queue(user.getUsername());
-            Binding binding = new Binding(user.getUsername(), Binding.DestinationType.QUEUE, exchange, user.getUsername(), null);
+            Binding binding = new Binding(user.getUsername(), Binding.DestinationType.QUEUE, exchange, String.valueOf(user.getId()), null);
             admin.declareQueue(queue);
             admin.declareBinding(binding);
             return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
