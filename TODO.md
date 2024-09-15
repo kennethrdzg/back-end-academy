@@ -12,8 +12,8 @@
   - [x] Front End: Login Form
   - [x] Front End: Posts and Likes
 - Friday, September 13th
-  - [ ] Update Like
-  - [ ] Unit Testing
+  - [x] Update Like
+  - [x] Unit Testing
   - [ ] RabbitMQ Message Brokering
 - Saturday, September 14th
   - [ ] REST API: PUT and DELETE endpoints
