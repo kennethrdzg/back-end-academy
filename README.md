@@ -1,4 +1,4 @@
-# Week 5: Final Project
+# Final Project: **SmallTalk**, a microblogging app
 
 ## Topics covered
 - [x] Object Oriented Programming
@@ -11,11 +11,11 @@
 - [x] Java Persistence API
 - [x] Sprind Data JPA
 - [ ] Spring Batch
-- [ ] Unit Testing
-- [ ] JUnit
-- [ ] Mockito
+- [x] Unit Testing
+- [x] JUnit
+- [x] Mockito
 - [ ] RabbitMQ
-- [ ] Security
+- [x] Security
 
 ## Suggestions
 - Docker Container
