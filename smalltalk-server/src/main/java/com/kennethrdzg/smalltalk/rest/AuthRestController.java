@@ -2,10 +2,12 @@ package com.kennethrdzg.smalltalk.rest;
 
 import java.util.Date;
 
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,12 @@ import com.kennethrdzg.smalltalk.service.UserService;
 public class AuthRestController{
     private UserService userService;
     private String secret_key;
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
+    @Autowired
+    private AmqpAdmin admin;
 
     @Autowired
     public AuthRestController(UserService userService){
@@ -59,6 +67,10 @@ public class AuthRestController{
         }
 
         try{
+            Queue queue = new Queue(user.getUsername());
+            Binding binding = new Binding(user.getUsername(), Binding.DestinationType.QUEUE, exchange, user.getUsername(), null);
+            admin.declareQueue(queue);
+            admin.declareBinding(binding);
             return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
             System.err.println("Could not authenticate user");
@@ -85,6 +97,10 @@ public class AuthRestController{
             throw new RuntimeException(e.getMessage());
         }
         try{
+            Queue queue = new Queue(user.getUsername());
+            Binding binding = new Binding(user.getUsername(), Binding.DestinationType.QUEUE, exchange, user.getUsername(), null);
+            admin.declareQueue(queue);
+            admin.declareBinding(binding);
             return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
             System.err.println("Could not create authentication token");
