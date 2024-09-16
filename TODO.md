@@ -14,11 +14,11 @@
 - Friday, September 13th
   - [x] Update Like
   - [x] Unit Testing
-  - [ ] RabbitMQ Message Brokering
+  - [x] RabbitMQ Message Brokering
 - Saturday, September 14th
-  - [ ] REST API: PUT and DELETE endpoints
+  - [x] REST API: PUT and DELETE endpoints
 - Sunday, September 15h
-  - [ ] Spring Batch: Data Migration or Backup
+  - [x] Spring Batch: Data Migration or Backup
 - Monday, September 16th
   - [ ] Documentation
 - [ ] Tuesday, September 17th: **DUE DATE**

@@ -6,7 +6,7 @@
 - [x] Lambda Expressions
 - [x] Streams
 - [x] Maven Dependencies
-- [ ] Design Patterns
+- [x] Design Patterns
 - [x] Databases
 - [x] Java Persistence API
 - [x] Sprind Data JPA
@@ -14,7 +14,7 @@
 - [x] Unit Testing
 - [x] JUnit
 - [x] Mockito
-- [ ] RabbitMQ
+- [x] RabbitMQ
 - [x] Security
 
 ## Suggestions
