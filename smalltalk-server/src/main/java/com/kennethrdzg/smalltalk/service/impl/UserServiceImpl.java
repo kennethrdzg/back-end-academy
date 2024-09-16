@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService{
                 return user;
             }
             catch(DataIntegrityViolationException e){
-                throw new RuntimeException(e.getMessage());
+                throw new RuntimeException("Username \\\"\" + username + \"\\\" is already taken");
             }
         }
-        return null;
+        throw new RuntimeException("Username \"" + username + "\" is already taken");
     }
 
     // @Override

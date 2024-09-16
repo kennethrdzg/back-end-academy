@@ -15,7 +15,7 @@ public class NotificationService{
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendNotification(String routingKey, String message){
-        rabbitTemplate.convertAndSend(exchange, routingKey, message);
+    public void sendNotification(String routingKey, String object){
+        rabbitTemplate.convertAndSend(exchange, routingKey, object);
     }
 }

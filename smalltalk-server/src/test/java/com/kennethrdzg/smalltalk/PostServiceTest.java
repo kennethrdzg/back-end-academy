@@ -38,7 +38,7 @@ class PostServiceTest{
         Mockito.when(postLikeService.getPostLikes(1)).thenReturn(5L);
         Mockito.when(postLikeService.isLikedByUser(1, 2)).thenReturn(true);
 
-        PostRestController postController = new PostRestController(postService, userService, postLikeService);
+        PostRestController postController = new PostRestController(postService, userService, postLikeService, null);
         
         PostDTO postDTO = postController.getPostById(1);
         assertEquals(1, postDTO.getId());
