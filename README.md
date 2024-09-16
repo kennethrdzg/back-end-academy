@@ -10,7 +10,7 @@
 - [x] Databases
 - [x] Java Persistence API
 - [x] Sprind Data JPA
-- [ ] Spring Batch
+- [x] Spring Batch
 - [x] Unit Testing
 - [x] JUnit
 - [x] Mockito
@@ -32,5 +32,5 @@
 - Fitness Tracking App
 - Task Management Application
 
-Selected Idea: **Social Media Platform**
+- Selected Idea: **Social Media Platform**
 
