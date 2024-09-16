@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RxStomp } from '@stomp/rx-stomp';
+import { Alert } from 'src/app/entities/alert';
 import { Post } from 'src/app/entities/post';
 import { UserToken } from 'src/app/entities/user-token';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -17,6 +17,7 @@ export class FeedPage implements OnInit {
 
   loading: boolean = false;
   posts: Post[] = [];
+  alerts: Alert[] = [];
 
   private userToken: UserToken;
   
@@ -49,15 +50,18 @@ export class FeedPage implements OnInit {
       .watch(this.userToken.username)
       .subscribe((message) => {
         console.log(message.body);
-        const post: Post = JSON.parse(message.body);
-        console.log(post);
+        let a: Alert = JSON.parse(message.body);
+        this.alerts.push(a);
+        if(this.alerts.length > 10){
+          this.alerts.pop();
+        }
         this.posts = this.posts.map(
           (p) => {
-            if(p.id != post.id){
+            if(p.id != a.postId){
               return p;
-            }
-            else{
-              p.likes = post.likes;
+            } else {
+              p.likes = a.likes;
+              console.log(a.message);
               return p;
             }
           }
@@ -106,10 +110,19 @@ export class FeedPage implements OnInit {
           let i = this.posts.indexOf(post);
           console.log(this.posts[i]);
           if(i > -1)
-            this.posts[i] = p;
+            this.posts[i].likes = p.likes;
           console.log(this.posts[i]);
         }
       )
+  }
+
+  deleteNotification(index: number){
+    console.log("Index: " +index)
+    this.alerts = this.alerts.filter(
+      (n, i) =>{
+        return i != index;
+      }
+    )
   }
 
   get postContent(){
