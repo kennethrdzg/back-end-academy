@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SmalltalkApiService } from './smalltalk-api.service';
+import { PostService } from './post.service';
 
-describe('SmalltalkApiService', () => {
-  let service: SmalltalkApiService;
+describe('PostService', () => {
+  let service: PostService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SmalltalkApiService);
+    service = TestBed.inject(PostService);
   });
 
   it('should be created', () => {

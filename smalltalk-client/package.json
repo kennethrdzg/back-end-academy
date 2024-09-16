@@ -27,6 +27,7 @@
     "@capacitor/keyboard": "6.0.2",
     "@capacitor/status-bar": "6.0.1",
     "@ionic/angular": "^8.0.0",
+    "@stomp/rx-stomp": "^2.0.0",
     "@types/crypto-js": "^4.2.2",
     "crypto-js": "^4.2.0",
     "ionicons": "^7.0.0",
