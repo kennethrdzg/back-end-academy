@@ -1,4 +1,4 @@
-# Week 5: Final Project
+# Final Project: **SmallTalk**, a microblogging app
 
 ## Topics covered
 - [x] Object Oriented Programming
@@ -6,16 +6,16 @@
 - [x] Lambda Expressions
 - [x] Streams
 - [x] Maven Dependencies
-- [ ] Design Patterns
+- [x] Design Patterns
 - [x] Databases
 - [x] Java Persistence API
 - [x] Sprind Data JPA
-- [ ] Spring Batch
-- [ ] Unit Testing
-- [ ] JUnit
-- [ ] Mockito
-- [ ] RabbitMQ
-- [ ] Security
+- [x] Spring Batch
+- [x] Unit Testing
+- [x] JUnit
+- [x] Mockito
+- [x] RabbitMQ
+- [x] Security
 
 ## Suggestions
 - Docker Container
@@ -32,5 +32,5 @@
 - Fitness Tracking App
 - Task Management Application
 
-Selected Idea: **Social Media Platform**
+- Selected Idea: **Social Media Platform**
 

@@ -1,0 +1,107 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Small Talk</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Small Talk</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div id="container">
+    @if(loading){
+      <div>
+        <p>Loading</p>
+      </div>
+    } @else {
+      @if (formType === 'register') {
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <p>Register</p>
+            </ion-col>
+            <ion-col>
+              <ion-button (click)="handleFormTypeChange('login')">Sign-In</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      }
+      @else if (formType === 'login') {
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button (click)="handleFormTypeChange('register')">Register</ion-button>
+            </ion-col>
+            <ion-col>
+              <p>Sign-In</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      } @else {
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button (click)="handleFormTypeChange('register')">Register</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button (click)="handleFormTypeChange('login')">Sign-In</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      }
+      @if(formType === 'register'){
+        <div>
+          <form [formGroup]="registerForm" (ngSubmit)="handleFormSubmit()">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-input type="text" label="Username" placeholder="Enter Username" errorText="Invalid Username" formControlName="username"></ion-input>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-input type="password" label="Password" placeholder="Enter a password" errorText="Invalid Password" formControlName="password">
+                    <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+                  </ion-input>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-button type="submit" [disabled]="!registerForm.valid">Create Account</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </form>
+        </div>
+      } @else if (formType === 'login') {
+        <div>
+          <form [formGroup]="loginForm" (ngSubmit)="handleFormSubmit()">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-input type="text" label="Username" placeholder="Enter Username" errorText="Invalid Username" formControlName="username"></ion-input>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-input type="password" label="Password" placeholder="Enter a password" errorText="Invalid Password" formControlName="password"></ion-input>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-button type="submit" [disabled]="!loginForm.valid">Sign-In</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </form>
+        </div>
+      }
+      <div>
+        <p>{{errorMessage}}</p>
+      </div>
+    }
+
+  </div>
+</ion-content>

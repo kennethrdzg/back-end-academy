@@ -1,0 +1,7 @@
+{
+  "name": "smalltalk-client",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -5,18 +5,20 @@
   - [x] REST API: User Registration and Login
 - [x] Tuesday, September 10th
   - [x] REST API: Posts and Comments
-- [ ] Wednesday, September 11th
-  - [ ] Front End: Login Form
-  - [ ] Security: Authentication and Authorization
+- [x] Wednesday, September 11th
+  - [x] Security: Authentication
+  - [x] Security: Authorization
 - Thursday, September 12th
-  - [ ] RabbitMQ Message Brokering
+  - [x] Front End: Login Form
+  - [x] Front End: Posts and Likes
 - Friday, September 13th
-  - [ ] Front End: Posts and Content
-  - [ ] Unit Testing
+  - [x] Update Like
+  - [x] Unit Testing
+  - [x] RabbitMQ Message Brokering
 - Saturday, September 14th
-  - [ ] REST API: PUT and DELETE endpoints
+  - [x] REST API: PUT and DELETE endpoints
 - Sunday, September 15h
-  - [ ] Spring Batch: Data Migration or Backup
+  - [x] Spring Batch: Data Migration or Backup
 - Monday, September 16th
   - [ ] Documentation
 - [ ] Tuesday, September 17th: **DUE DATE**
