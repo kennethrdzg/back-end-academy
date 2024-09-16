@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/bash
 
 source env_variables.sh
 mvn clean compile test

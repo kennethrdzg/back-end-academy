@@ -1,15 +1,104 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>SmallTalk</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="logOut()">
-        <ion-label>Log Out</ion-label>
-        <ion-icon name="log-out-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Notifications</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    @if(alerts.length <= 0){
+      <div>
+        <p>You are up to date</p>
+      </div>
+    }
+    @for (n of alerts; track $index) {
+      <ion-card (click)="deleteNotification($index)">
+        <ion-card-content>
+          <p>{{n.message}}</p>
+        </ion-card-content>
+      </ion-card>
+    }
+  </ion-content>
+</ion-menu>
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        @if(alerts.length > 0){
+          <ion-menu-button>
+            <label>{{alerts.length}}</label>
+            <ion-icon name="alert"></ion-icon>
+          </ion-menu-button>
+        }
+      </ion-buttons>
+      <ion-title>SmallTalk Feed</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="logOut()">
+          <ion-label>Log Out</ion-label>
+          <ion-icon name="log-out-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding" id="container">
+    <ion-grid>
+      <br>
+      <br>
+      <ion-row>
+        <ion-col>
+          <ion-card>
 
+            <ion-card-content>
+              <form [formGroup]="postForm" (ngSubmit)="uploadPost()">
+                <ion-input type="text" placeholder="Share your thoughts, {{username}}..." formControlName="content"></ion-input>
+                <ion-button type="submit" [disabled]="!postForm.valid">Post</ion-button>
+              </form>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="getPosts()">
+            <ion-icon name="arrow-up"></ion-icon>
+          </ion-button>
+          <p>Update Feed</p>
+        </ion-col>
+      </ion-row>
+      @if(posts.length <= 0 && !loading){
+        <ion-row>
+          <ion-col>
+            No posts to see.
+          </ion-col>
+        </ion-row>
+      }
+      @if(!loading && posts.length > 0){
+        @for (post of posts; track post.id) {
+          <ion-row>
+            <ion-col>
+              <ion-card>
+                <ion-card-content>
+                  <div>{{post.username}}</div>
+                  <div>{{post.content}}</div>
+                  <div>{{post.timestamp}}</div>
+                  <div (click)="likeButtonPressed(post)">
+                    @if(post.liked){
+                      <ion-icon name="heart"></ion-icon>
+                    } @else {
+                      <ion-icon name="heart-outline"></ion-icon>
+                    }
+                  </div>
+                  <div>{{post.likes}}</div>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        }
+      }
+    </ion-grid>
+  </ion-content>
+</div>
+<!-- 
+  
 <ion-content>
   <div id="container">
     <ion-grid>
@@ -67,3 +156,5 @@
     </ion-grid>
   </div>
 </ion-content>
+ 
+-->
