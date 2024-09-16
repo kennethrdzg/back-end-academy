@@ -1,11 +1,14 @@
 package com.kennethrdzg.smalltalk.rest;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +26,21 @@ import com.kennethrdzg.smalltalk.service.UserService;
 @CrossOrigin
 public class AuthRestController{
     private UserService userService;
+
+    @Value("${server.secret.key}")
     private String secret_key;
+
+    private Logger LOGGER = Logger.getLogger(AuthRestController.class.getName());
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
+    @Autowired
+    private AmqpAdmin admin;
 
     @Autowired
     public AuthRestController(UserService userService){
         this.userService = userService;
-        this.secret_key = System.getenv("APP_SECRET_KEY");
     }
 
     private String createToken(String username) throws RuntimeException{
@@ -54,11 +66,16 @@ public class AuthRestController{
             user = userService.register(user);
         }
         catch(RuntimeException e){
-            System.err.println("Username \"" + user.getUsername() + "\" is already taken");
-            throw new RuntimeException(e.getMessage());
+            LOGGER.warning(e.getMessage());
+            throw new RuntimeException();
         }
 
         try{
+            Queue queue = new Queue(user.getUsername());
+            Binding binding = new Binding(user.getUsername(), Binding.DestinationType.QUEUE, exchange, String.valueOf(user.getId()), null);
+            admin.declareQueue(queue);
+            admin.declareBinding(binding);
+            LOGGER.info("New user \"" + user.getUsername() + "\" created succesfully.");
             return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
             System.err.println("Could not authenticate user");
@@ -85,6 +102,11 @@ public class AuthRestController{
             throw new RuntimeException(e.getMessage());
         }
         try{
+            Queue queue = new Queue(user.getUsername());
+            Binding binding = new Binding(user.getUsername(), Binding.DestinationType.QUEUE, exchange, String.valueOf(user.getId()), null);
+            admin.declareQueue(queue);
+            admin.declareBinding(binding);
+            LOGGER.info("User \"" + user.getUsername() + "\" logged-in succesfully.");
             return new UserToken(user.getId(), user.getUsername(), createToken(user.getUsername()));
         } catch(RuntimeException e){
             System.err.println("Could not create authentication token");

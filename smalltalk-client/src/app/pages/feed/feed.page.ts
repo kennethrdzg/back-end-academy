@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { RxStomp } from '@stomp/rx-stomp';
 import { Post } from 'src/app/entities/post';
 import { UserToken } from 'src/app/entities/user-token';
+import { NotificationService } from 'src/app/services/notification.service';
+import { PostService } from 'src/app/services/post.service';
 import { SessionService } from 'src/app/services/session.service';
-import { SmalltalkApiService } from 'src/app/services/smalltalk-api.service';
 
 @Component({
   selector: 'app-feed',
@@ -27,7 +29,13 @@ export class FeedPage implements OnInit {
     ])
   });
 
-  constructor(private router: Router, private sessionService: SessionService, private apiService: SmalltalkApiService) {
+  constructor(
+    private router: Router,
+    private sessionService: SessionService,
+    private postService: PostService,
+    private notificationService: NotificationService
+  ) {
+
     const session = sessionService.getSession();
     if(!session.token){
       this.router.navigate(['home']);
@@ -37,6 +45,24 @@ export class FeedPage implements OnInit {
 
   ngOnInit() {
     this.getPosts();
+    this.notificationService.subsciption()
+      .watch(this.userToken.username)
+      .subscribe((message) => {
+        console.log(message.body);
+        const post: Post = JSON.parse(message.body);
+        console.log(post);
+        this.posts = this.posts.map(
+          (p) => {
+            if(p.id != post.id){
+              return p;
+            }
+            else{
+              p.likes = post.likes;
+              return p;
+            }
+          }
+        )
+      });
   }
 
   logOut(){
@@ -47,7 +73,7 @@ export class FeedPage implements OnInit {
   getPosts(){
     this.loading = true;
     this.posts = [];
-    this.apiService.getPosts(this.userToken).subscribe(
+    this.postService.getPosts(this.userToken).subscribe(
       (res) => {
         res.forEach(
           (post) => {
@@ -61,7 +87,7 @@ export class FeedPage implements OnInit {
 
   uploadPost(){
     this.loading = true;
-    this.apiService
+    this.postService
       .uploadPost(
         this.userToken,
         this.postContent?.getRawValue()
@@ -74,7 +100,7 @@ export class FeedPage implements OnInit {
 
   likeButtonPressed(post: Post){
     post.liked = !post.liked;
-    this.apiService.likeButtonPressed(this.userToken, post.id, post.liked)
+    this.postService.likeButtonPressed(this.userToken, post.id, post.liked)
       .subscribe(
         (p) =>{
           let i = this.posts.indexOf(post);

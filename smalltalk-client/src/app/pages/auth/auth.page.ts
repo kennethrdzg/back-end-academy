@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, map, Observable } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 import { SessionService } from 'src/app/services/session.service';
-import { SmalltalkApiService } from 'src/app/services/smalltalk-api.service';
 
 @Component({
   selector: 'app-auth',
@@ -41,7 +40,7 @@ export class AuthPage implements OnInit {
     ])
   })
 
-  constructor(private router: Router, private apiService: SmalltalkApiService, private sessionService: SessionService) {
+  constructor(private router: Router, private authService: AuthService, private sessionService: SessionService) {
     if(this.router.url !== '/auth'){
       this.formType = this.router.url.substring(1);
     }
@@ -64,7 +63,7 @@ export class AuthPage implements OnInit {
   handleFormSubmit(){
     this.loading = true;
     if(this.formType === 'register'){
-      this.apiService.registerUser(this.username?.getRawValue(), this.password?.getRawValue())
+      this.authService.registerUser(this.username?.getRawValue(), this.password?.getRawValue())
         .subscribe({
           next: (userToken) => {
             this.errorMessage = '';
@@ -77,7 +76,7 @@ export class AuthPage implements OnInit {
           }
         })
     } else if(this.formType === 'login'){
-      this.apiService.logIn(this.username?.getRawValue(), this.password?.getRawValue())
+      this.authService.logIn(this.username?.getRawValue(), this.password?.getRawValue())
         .subscribe({
           next: (userToken) => {
             this.errorMessage = '';

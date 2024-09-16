@@ -2,8 +2,11 @@ package com.kennethrdzg.smalltalk.rest;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +23,7 @@ import com.kennethrdzg.smalltalk.dto.PostDTO;
 import com.kennethrdzg.smalltalk.entities.Post;
 import com.kennethrdzg.smalltalk.entities.PostLike;
 import com.kennethrdzg.smalltalk.entities.User;
+import com.kennethrdzg.smalltalk.service.NotificationService;
 import com.kennethrdzg.smalltalk.service.PostLikeService;
 import com.kennethrdzg.smalltalk.service.PostService;
 import com.kennethrdzg.smalltalk.service.UserService;
@@ -31,14 +35,19 @@ public class PostRestController {
     private PostService postService;
     private UserService userService;
     private PostLikeService postLikeService;
+    @Value("${server.secret.key}")
     private String secretKey;
 
+    private Logger LOGGER = Logger.getLogger(PostRestController.class.getName());
+
+    private NotificationService notificationService;
+
     @Autowired
-    public PostRestController(PostService postService, UserService userService, PostLikeService postLikeService){
+    public PostRestController(PostService postService, UserService userService, PostLikeService postLikeService, NotificationService notificationService){
         this.postService = postService;
         this.userService = userService;
         this.postLikeService = postLikeService;
-        this.secretKey = System.getenv("APP_SECRET_KEY");
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/{userId}/{token}")
@@ -207,14 +216,16 @@ public class PostRestController {
         }
         PostLike postLike = this.postLikeService.updateLike(postDTO.getId(), user.getId(), postDTO.isLiked());
         Post post = this.postService.getPostById(postDTO.getId());
-        return new PostDTO(
-            postDTO.getId(),
-            post.getContent(),
-            post.getTimestamp(),
-            this.userService.getUserById(post.getUserId()).getUsername(),
-            postLike.isLiked(),
-            this.postLikeService.getPostLikes(post.getId()),
-            null
-        );
+        postDTO.setUsername(this.userService.getUserById(post.getUserId()).getUsername());
+        postDTO.setTimestamp(post.getTimestamp());
+        postDTO.setLikes(this.postLikeService.getPostLikes(post.getId()));
+        postDTO.setLiked(this.postLikeService.isLikedByUser(post.getId(), user.getId()));
+        postDTO.setToken(null);
+        if(postLike.isLiked()){
+            JSONObject jsonObject = new JSONObject(postDTO);
+            notificationService.sendNotification(String.valueOf(post.getUserId()), jsonObject.toString());
+            LOGGER.info("Sent notification to queue: " + user.getUsername());
+        }
+        return postDTO;
     }
 }
