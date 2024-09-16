@@ -20,6 +20,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.kennethrdzg.smalltalk.dto.PostDTO;
+import com.kennethrdzg.smalltalk.entities.Notification;
 import com.kennethrdzg.smalltalk.entities.Post;
 import com.kennethrdzg.smalltalk.entities.PostLike;
 import com.kennethrdzg.smalltalk.entities.User;
@@ -222,7 +223,8 @@ public class PostRestController {
         postDTO.setLiked(this.postLikeService.isLikedByUser(post.getId(), user.getId()));
         postDTO.setToken(null);
         if(postLike.isLiked()){
-            JSONObject jsonObject = new JSONObject(postDTO);
+            Notification notification = new Notification(post.getId(), postDTO.getLikes(), user.getUsername() + " liked your post!");
+            JSONObject jsonObject = new JSONObject(notification);
             notificationService.sendNotification(String.valueOf(post.getUserId()), jsonObject.toString());
             LOGGER.info("Sent notification to queue: " + user.getUsername());
         }
