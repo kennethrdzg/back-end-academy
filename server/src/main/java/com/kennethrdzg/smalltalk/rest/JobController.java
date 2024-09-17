@@ -40,8 +40,9 @@ public class JobController{
             jobLauncher.run(job, jobParameters);
         } catch(JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException e){
             LOGGER.severe("Backup Job Failed");
+            return ResponseEntity.badRequest().body("Backup Job Failed");
         }
         LOGGER.info("Backup Job Completed Succesfully");
-        return ResponseEntity.ok("Backup Job Completed Succesfully");
+        return ResponseEntity.ok("Backup Job was Succesful");
     }
 }
