@@ -1,4 +1,4 @@
-package com.kennethrdzg.smalltalk.scheduler;
+package com.kennethrdzg.smalltalk.rest;
 
 import java.util.logging.Logger;
 
@@ -11,21 +11,28 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Component
-public class BatchScheduler{
+@RestController
+@RequestMapping("/jobs")
+public class JobController{
     @Autowired
     private JobLauncher jobLauncher;
 
     @Autowired
     private Job job;
 
-    private Logger LOGGER = Logger.getLogger(BatchScheduler.class.getName());
+    private Logger LOGGER = Logger.getLogger(JobController.class.getName());
 
     @Scheduled(cron = "0 0 0 * * *")
-    public void backupUsers(){
+    @GetMapping
+    public ResponseEntity<String> backupUsers(){
         JobParameters jobParameters = new JobParametersBuilder()
             .addLong("startAt", System.currentTimeMillis())
             .toJobParameters();
@@ -35,6 +42,6 @@ public class BatchScheduler{
             LOGGER.severe("Backup Job Failed");
         }
         LOGGER.info("Backup Job Completed Succesfully");
-        return;
+        return ResponseEntity.ok("Backup Job Completed Succesfully");
     }
 }

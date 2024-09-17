@@ -222,11 +222,11 @@ public class PostRestController {
         postDTO.setLikes(this.postLikeService.getPostLikes(post.getId()));
         postDTO.setLiked(this.postLikeService.isLikedByUser(post.getId(), user.getId()));
         postDTO.setToken(null);
-        if(postLike.isLiked()){
+        if(postLike.isLiked() && post.getUserId() != user.getId()){
             Notification notification = new Notification(post.getId(), postDTO.getLikes(), user.getUsername() + " liked your post!");
             JSONObject jsonObject = new JSONObject(notification);
             notificationService.sendNotification(String.valueOf(post.getUserId()), jsonObject.toString());
-            LOGGER.info("Sent notification to queue: " + user.getUsername());
+            LOGGER.info("Sent notification to exchange with routing key " + post.getUserId());
         }
         return postDTO;
     }
