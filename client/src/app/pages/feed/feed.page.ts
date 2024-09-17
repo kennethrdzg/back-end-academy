@@ -108,10 +108,8 @@ export class FeedPage implements OnInit {
       .subscribe(
         (p) =>{
           let i = this.posts.indexOf(post);
-          console.log(this.posts[i]);
           if(i > -1)
             this.posts[i].likes = p.likes;
-          console.log(this.posts[i]);
         }
       )
   }
