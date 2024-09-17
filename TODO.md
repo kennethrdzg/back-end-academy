@@ -20,7 +20,7 @@
 - Sunday, September 15h
   - [x] Spring Batch: Data Migration or Backup
 - Monday, September 16th
-  - [ ] Documentation
+  - [x] Documentation
 - [ ] Tuesday, September 17th: **DUE DATE**
   - [ ] Project Submission
 
